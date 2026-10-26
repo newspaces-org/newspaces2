@@ -1,0 +1,72 @@
+.carousel {
+  position: relative;
+  margin: 1.5em 0;
+}
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  margin: 0;
+  text-align: center;
+}
+.carousel-slide img {
+  display: block;
+  margin: 0;
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  background: #111;
+}
+.carousel-slide figcaption {
+  padding: 0.5em 1em;
+  font-size: 0.9em;
+  color: #555;
+}
+.carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  width: 2.2em;
+  height: 2.2em;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.3em;
+  line-height: 1;
+}
+.carousel-prev {
+  left: 0.5em;
+}
+.carousel-next {
+  right: 0.5em;
+}
+.carousel-dots {
+  text-align: center;
+  margin-top: 0.5em;
+}
+.carousel-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: #ccc;
+  margin: 0 4px;
+  padding: 0;
+  cursor: pointer;
+}
+.carousel-dots button.active {
+  background: #555;
+}

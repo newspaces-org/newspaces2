@@ -1,0 +1,8 @@
+{%- comment -%}include figure.html src=... alt=... ratio="4/3" treatment="plates|halftone"{%- endcomment -%}
+{%- assign t = include.treatment | default: site.image_treatment -%}
+{%- if site.look != 'press' -%}{%- assign t = 'natural' -%}{%- endif -%}
+{%- if t == 'plates' -%}
+<figure class="cmyk ns-plates" style="--ratio:{{ include.ratio | default: '4/3' }}"><div class="print"><i></i><img src="{{ include.src | relative_url }}" alt="{{ include.alt | escape }}" loading="lazy"></div></figure>
+{%- else -%}
+<figure class="halftone ns-screen" style="--ratio:{{ include.ratio | default: '4/3' }}"><img src="{{ include.src | relative_url }}" alt="{{ include.alt | escape }}" loading="lazy"></figure>
+{%- endif -%}

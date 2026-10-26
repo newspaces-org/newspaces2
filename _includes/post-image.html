@@ -1,0 +1,10 @@
+{%- comment -%}Sets post_img for include.post. With thumb=true (listing crops) the front-matter thumbnail wins; otherwise it is the front-matter image, else the first <img> in the content.{%- endcomment -%}
+{%- if include.thumb and include.post.thumbnail -%}
+  {%- assign post_img = include.post.thumbnail -%}
+{%- else -%}
+  {%- assign post_img = include.post.image -%}
+{%- endif -%}
+{%- unless post_img -%}
+  {%- assign _parts = include.post.content | split: '<img src="' -%}
+  {%- if _parts.size > 1 -%}{%- assign post_img = _parts[1] | split: '"' | first -%}{%- endif -%}
+{%- endunless -%}

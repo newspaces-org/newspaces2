@@ -1,0 +1,64 @@
+---
+layout: default
+---
+{%- assign featured = site.posts | where: "featured", true | first -%}
+{%- if featured -%}{%- assign lead = featured -%}{%- else -%}{%- assign lead = site.posts.first -%}{%- endif -%}
+{%- include post-image.html post=lead -%}{%- assign lead_img = post_img -%}
+
+<section class="ns-lead{% unless lead_img %} ns-lead-noimg{% endunless %}">
+  {% if lead_img %}<a href="{{ lead.url | relative_url }}" class="ns-lead-fig">{% include figure.html src=lead_img alt=lead.title ratio="4/3" %}</a>{% endif %}
+  <div class="ns-lead-copy">
+    {% include meta.html post=lead %}
+    <h2 class="ns-lead-title"><a href="{{ lead.url | relative_url }}">{{ lead.title }}</a></h2>
+    <p class="ns-lede">{{ lead.excerpt | strip_html | strip }}</p>
+    <div class="ns-actions">
+      <a class="btn btn-primary" href="{{ lead.url | relative_url }}">Read the story</a>
+      <a class="btn btn-ghost" href="{{ '/archive/' | relative_url }}#{{ lead.tags.first | slugify }}">More from {{ lead.tags.first }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="ns-seconds">
+  {%- assign shown = 0 -%}
+  {%- for p in site.posts -%}
+    {%- if p.url == lead.url or shown >= 3 -%}{%- continue -%}{%- endif -%}
+    {%- include post-image.html post=p thumb=true -%}
+    {%- unless post_img -%}{%- continue -%}{%- endunless -%}
+    {%- assign shown = shown | plus: 1 %}
+  <article class="ns-second">
+    <a href="{{ p.url | relative_url }}" class="halftone ns-thumb"><img src="{{ post_img | relative_url }}" alt="{{ p.title | escape }}" loading="lazy"></a>
+    <span class="ns-meta ns-meta-sm"><span class="ns-spot">{{ p.tags.first }}</span><span>{{ p.date | date: "%Y" }}</span></span>
+    <h3 class="ns-second-title"><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+    <p class="ns-justify">{{ p.excerpt | strip_html | strip }}</p>
+  </article>
+  {%- endfor %}
+</section>
+
+<section class="ns-elements">
+  <div>
+    <span class="ns-kicker">By element</span>
+    <div class="ns-index">
+      {% for el in site.elements %}{% assign n = site.tags[el] | size %}
+      <a class="ns-ix" href="{{ '/archive/' | relative_url }}#{{ el | slugify }}"><span class="ns-ix-name">{{ el }}</span><span class="ns-ix-leader"></span><span class="ns-ix-num">{{ n }}</span></a>
+      {% endfor %}
+    </div>
+  </div>
+  {% if page.quote %}
+  <figure class="ns-quote">
+    <blockquote>“{{ page.quote }}”</blockquote>
+    <figcaption>— {{ page.quote_source }}{% if page.quote_link %} <a href="{{ page.quote_link | relative_url }}">Read more</a>{% endif %}</figcaption>
+  </figure>
+  {% endif %}
+</section>
+
+<section class="ns-list-sec">
+  <div class="ns-list-head">
+    <h2 class="ns-h2">All articles</h2>
+    <a href="{{ '/archive/' | relative_url }}">Browse by element →</a>
+  </div>
+  <div class="ns-list">
+    {% for p in site.posts %}
+    <a class="ns-row" href="{{ p.url | relative_url }}"><span class="ns-row-title">{{ p.title }}</span><span class="ns-row-meta">{{ p.tags.first }} · {{ p.date | date: "%B %-d, %Y" }}</span></a>
+    {% endfor %}
+  </div>
+</section>

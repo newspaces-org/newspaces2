@@ -1,0 +1,46 @@
+---
+layout: default
+---
+{%- include post-image.html post=page -%}
+{%- assign hero = post_img -%}
+{%- assign body = content -%}
+{%- if hero and page.image == nil -%}
+  {%- comment -%}hero came from the body: drop that first image so it isn't printed twice{%- endcomment -%}
+  {%- assign _tag = content | split: '<img' | slice: 1 | first | split: '>' | first -%}
+  {%- assign _tag = '<img' | append: _tag | append: '>' -%}
+  {%- assign body = content | replace_first: _tag, '' -%}
+{%- endif -%}
+{%- assign words = content | strip_html | number_of_words -%}
+<article class="ns-article">
+  <div class="ns-article-head">
+    <span class="ns-meta">{% for t in page.tags limit:1 %}<a class="ns-kicker-link" href="{{ '/archive/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>{% endfor %}<span>{{ page.date | date: "%B %-d, %Y" }}</span><span>{{ words | divided_by: 220 | plus: 1 }} min read</span></span>
+    <h1 class="ns-article-title">{{ page.title }}</h1>
+    {% if page.lede %}<p class="ns-article-lede">{{ page.lede }}</p>{% endif %}
+  </div>
+  {% if hero %}<div class="ns-hero">{% include figure.html src=hero alt=page.title ratio="2/1" %}</div>{% endif %}
+  <div class="ns-article-grid">
+    <aside class="ns-aside">
+      <div><div class="ns-aside-label">Filed under</div><div class="ns-tags">{% for t in page.tags %}<a class="tag tag-accent" href="{{ '/archive/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>{% endfor %}</div></div>
+      {% assign _y = page.date | date: '%Y' | plus: 0 %}{% if _y <= site.archive_until %}<div><div class="ns-aside-label">From the archive</div>First published on newspaces in {{ page.date | date: "%Y" }}.</div>{% endif %}
+    </aside>
+    <div class="ns-body">{{ body }}</div>
+  </div>
+</article>
+
+{%- assign tag = page.tags.first -%}
+{%- assign shown = 0 -%}
+<section class="ns-related">
+  <span class="ns-kicker">More from {{ tag }}</span>
+  <div class="ns-related-grid">
+  {%- for p in site.tags[tag] -%}
+    {%- if p.url == page.url or shown >= 3 -%}{%- continue -%}{%- endif -%}
+    {%- include post-image.html post=p thumb=true -%}{%- unless post_img -%}{%- continue -%}{%- endunless -%}
+    {%- assign shown = shown | plus: 1 %}
+    <a class="ns-related-item" href="{{ p.url | relative_url }}">
+      <div class="halftone ns-thumb"><img src="{{ post_img | relative_url }}" alt="" loading="lazy"></div>
+      <span class="ns-related-title">{{ p.title }}</span>
+      <span class="ns-row-meta">{{ p.date | date: "%B %-d, %Y" }}</span>
+    </a>
+  {%- endfor %}
+  </div>
+</section>

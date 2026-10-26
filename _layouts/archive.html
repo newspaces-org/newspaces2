@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<section class="ns-archive-head">
+  <h1 class="ns-h1">{{ page.title | default: 'The archive' }}</h1>
+  {% if page.intro %}<p class="ns-lede">{{ page.intro }}</p>{% endif %}
+</section>
+<div class="ns-filters" data-ns-filters>
+  <a class="tag tag-accent" href="#" data-filter="">All <span>{{ site.posts | size }}</span></a>
+  {% for el in site.elements %}<a class="tag tag-outline" href="#{{ el | slugify }}" data-filter="{{ el | slugify }}">{{ el }} <span>{{ site.tags[el] | size }}</span></a>{% endfor %}
+</div>
+<section class="ns-archive">
+  {% for p in site.posts %}{% include post-image.html post=p thumb=true %}
+  <a class="ns-arow" href="{{ p.url | relative_url }}" data-tags="{% for t in p.tags %}{{ t | slugify }} {% endfor %}">
+    <div class="halftone ns-arow-thumb">{% if post_img %}<img src="{{ post_img | relative_url }}" alt="" loading="lazy">{% endif %}</div>
+    <div class="ns-arow-copy">
+      <span class="ns-row-meta">{{ p.tags.first }} · {{ p.date | date: "%B %-d, %Y" }}</span>
+      <span class="ns-arow-title">{{ p.title }}</span>
+      <span class="ns-arow-excerpt">{{ p.excerpt | strip_html | strip }}</span>
+    </div>
+  </a>
+  {% endfor %}
+</section>
+<script src="{{ '/assets/js/archive-filter.js' | relative_url }}"></script>

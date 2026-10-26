@@ -1,0 +1,8 @@
+# Jekyll build output (GitHub Pages builds from source)
+_site/
+.jekyll-cache/
+.jekyll-metadata
+vendor/bundle/
+
+# Freebuff preview runtime (logs/pid — jekyll serve must not rebuild on these)
+.vly-run/

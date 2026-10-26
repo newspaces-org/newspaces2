@@ -1,0 +1,28 @@
+title: NewSpaces.org
+description: Neue Räume für die Menschheit (New Spaces for Mankind)
+tagline: Artificial islands & unconventional habitats
+place: Vienna
+since: 2012
+markdown: kramdown
+permalink: /:slug/
+# theme: minima   <- remove; this theme lives in _layouts/_includes/assets
+
+# Topic index on the front page and filter chips on /archive/ (must match post tags)
+elements: [Sea, Air, Space, Underground, Infrastructure, Environments, Experiences]
+# Look: eco (warm paper, sea-green ink, natural-colour photos) or press (newsprint, CMYK plates)
+look: eco
+# Press look only — image style for lead + hero: plates or halftone
+image_treatment: plates
+archive_cutoff: 2016-01-01
+archive_until: 2015  # posts up to this year get the "From the archive" note
+# Never processed, and never watched: jekyll serve rebuilds on any source
+# change, so the preview runtime's own log must not sit in the watch tree.
+exclude:
+  - .vly-run
+  - scripts
+
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: post }
+  - scope: { path: "" , type: pages }
+    values: { layout: page }

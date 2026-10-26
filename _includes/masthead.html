@@ -1,0 +1,21 @@
+<header class="ns-wrap ns-head">
+  <div class="ns-topline">
+    <nav class="ns-nav">
+      {% for el in site.elements limit: 4 %}<a href="{{ '/archive/' | relative_url }}#{{ el | slugify }}">{{ el }}</a>{% endfor %}
+      <a href="{{ '/archive/' | relative_url }}">Archive</a>
+      <a href="{{ site.about_url | default: '/npo-newspaces/' | relative_url }}">About</a>
+    </nav>
+  </div>
+  <a class="ns-brand" href="{{ '/' | relative_url }}">
+    {% if site.look == 'press' and site.image_treatment == 'plates' %}
+    <h1 class="ns-title"><span class="cmyk-head"><span class="paper">{{ site.title }}</span><span class="plate plate-c" aria-hidden="true">{{ site.title }}</span><span class="plate plate-m" aria-hidden="true">{{ site.title }}</span><span class="plate plate-y" aria-hidden="true">{{ site.title }}</span></span></h1>
+    {% else %}{% assign _t = site.title | split: '.' %}<h1 class="ns-title">{{ _t.first }}{% if _t.size > 1 %}<span class="ns-tld">.{{ _t | shift | join: '.' }}</span>{% endif %}</h1>{% endif %}
+  </a>
+  <hr class="ns-rule-head">
+  <div class="ns-dateline">
+    <span>{{ site.tagline }}</span>
+    <span>{{ site.elements | slice: 0, 4 | join: ' · ' }}</span>
+    <span>Since {{ site.since }}</span>
+  </div>
+  <hr class="ns-rule-cut">
+</header>
