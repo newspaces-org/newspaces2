@@ -71,13 +71,11 @@ article, or asks to change an existing one.
    the hero renders exactly once, the archive row uses the thumbnail, every
    post still has an archive row, and the referenced JPEGs exist in the
    output. Fix failures at the source; never weaken the script.
-7. **Preview** (only if the user wants to look at it):
-   `freebuff-preview start`, then `freebuff-preview status` / `logs`.
-   The commands are already saved (`jekyll serve --host 0.0.0.0 --port
-   ${PORT:-4000}`, install = `jekyll` if missing). **Never** run
-   `jekyll serve` / `bun run dev` from the shell — it would steal the managed
-   preview port. If the preview looks stale, fix the cause, then
-   `freebuff-preview restart`.
+7. **Preview before posting** — always do this for a new article: use the
+   `preview-article` skill. It runs the repo's `github-pages` Docker image
+   (Jekyll 3.10, safe mode), so what you see is what Pages publishes, checks
+   the rendered routes and shows the article to the user. Publishing is the
+   `preview-and-publish` skill, and only on an explicit request.
 8. **Publishing** happens by pushing to `main` — GitHub Pages builds it.
    Do not set up Freebuff deploys for this repo (the hosting builder is
    Node-only; Jekyll cannot run there). Do not add Jekyll plugins or
@@ -128,18 +126,15 @@ What survives a session close, and where it lives:
   dot-paths (`.agents/`, `.gitignore`) are skipped by Jekyll itself, and
   `scripts/` is listed under `exclude:` (the verify script fails if it ever
   leaks into the build output).
-- **In Freebuff project settings (outside the sandbox)** — the preview
-  commands. They are stored by the platform, not in the workspace, so they
-  load automatically in a new session. Re-create them any time with:
+- **In the repo (pushed to `main`)** — the preview definition too:
+  `Dockerfile`, `docker-compose.yml`, `.dockerignore`, and the
+  `preview-article` (preview only) and `preview-and-publish` (publish) skills.
+  Rebuild the image with `docker compose build`; nothing depends on
+  platform-stored preview settings.
 
-  ```sh
-  freebuff-preview set-install 'command -v jekyll >/dev/null 2>&1 || gem install jekyll --no-document'
-  freebuff-preview set 'jekyll serve --host 0.0.0.0 --port ${PORT:-4000}' 4000
-  ```
-
-- **Ephemeral (rebuilt with the sandbox)** — ruby/Jekyll itself and any
-  Python imaging package. The install command reinstalls Jekyll on preview
-  start; for image work run `pip install pillow pillow-avif-plugin` again.
+- **Ephemeral (rebuilt with the sandbox)** — the Docker image, the preview
+  container, ruby/Jekyll itself and any Python imaging package. For image work
+  run `pip install pillow pillow-avif-plugin` again.
   Git identity is **not** carried by the repo: `.git/config` is local to this
   workspace, Freebuff can overwrite it, and a fresh clone will not have it —
   so re-set it and verify the author before every commit (see step 9).

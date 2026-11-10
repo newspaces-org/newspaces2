@@ -22,7 +22,14 @@ echo "post: $POST"
 OUT="$(mktemp -d)"
 trap 'rm -rf "$OUT"' EXIT
 
-if ! jekyll build --destination "$OUT" --disable-disk-cache >/dev/null; then
+# Jekyll 4 accepts --disable-disk-cache, Jekyll 3.10 (the github-pages gem, i.e.
+# what GitHub Pages actually runs) rejects it as an unknown option.
+CACHE_FLAG=""
+if jekyll build --help 2>/dev/null | grep -q -- '--disable-disk-cache'; then
+  CACHE_FLAG="--disable-disk-cache"
+fi
+
+if ! jekyll build --destination "$OUT" $CACHE_FLAG >/dev/null; then
   echo "FAIL: jekyll build failed" >&2
   exit 1
 fi
